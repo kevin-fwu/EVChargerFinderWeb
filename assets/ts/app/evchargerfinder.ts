@@ -114,6 +114,37 @@ function loadNearestStations(map: google.maps.Map, pos: Position) {
     })
 }
 
+function addMapButton(map: google.maps.Map, btn: HTMLButtonElement, location: number) {
+
+    // Set CSS for the control.
+    btn.style.backgroundColor = '#fff';
+    btn.style.border = '2px solid #fff';
+    btn.style.borderRadius = '3px';
+    btn.style.boxShadow = '0 2px 6px rgba(0,0,0,.3)';
+    btn.style.color = 'rgb(25,25,25)';
+    btn.style.cursor = 'pointer';
+    btn.style.fontFamily = 'Roboto,Arial,sans-serif';
+    btn.style.fontSize = '16px';
+    btn.style.lineHeight = '38px';
+    btn.style.margin = '4px 8px 4px 22px';
+    btn.style.textAlign = 'center';
+    var computedStyle = getComputedStyle(btn);
+
+    var elementHeight = btn.clientHeight;  // height with padding
+    var elementWidth = btn.clientWidth;   // width with padding
+
+    elementHeight -= parseFloat(computedStyle.paddingTop) + parseFloat(computedStyle.paddingBottom);
+    elementWidth -= parseFloat(computedStyle.paddingLeft) + parseFloat(computedStyle.paddingRight);
+
+    if (elementWidth < 38) {
+        const padding = (38 - elementWidth)/2;
+        console.log("padding is " + padding.toString());
+        btn.style.padding = '0 ' + padding.toString() + 'px 0 ' + padding.toString() + 'px';
+    }
+
+    map.controls[location].push(btn);
+}
+
 function initSearchBar(map: google.maps.Map) {
     // Create the search box and link it to the UI element.
     const input = document.getElementById("searchloc") as HTMLInputElement;
@@ -178,6 +209,8 @@ function initCurrentLoc(map: google.maps.Map) {
             handleLocationError(false, infoWindow, map.getCenter()!);
         }
     });
+
+    addMapButton(map, locationButton, google.maps.ControlPosition.RIGHT_CENTER);
 }
 
 function initFilters(map: google.maps.Map) {
@@ -186,19 +219,7 @@ function initFilters(map: google.maps.Map) {
     const filtersButton = document.getElementById("filtersBtn") as HTMLButtonElement;
     const closeFilters = document.getElementById("closeFiltersBtn") as HTMLSpanElement;
 
-    // Set CSS for the control.
-    filtersButton.style.backgroundColor = '#fff';
-    filtersButton.style.border = '2px solid #fff';
-    filtersButton.style.borderRadius = '3px';
-    filtersButton.style.boxShadow = '0 2px 6px rgba(0,0,0,.3)';
-    filtersButton.style.color = 'rgb(25,25,25)';
-    filtersButton.style.cursor = 'pointer';
-    filtersButton.style.fontFamily = 'Roboto,Arial,sans-serif';
-    filtersButton.style.fontSize = '16px';
-    filtersButton.style.lineHeight = '38px';
-    filtersButton.style.margin = '8px 0 22px';
-    filtersButton.style.padding = '0 5px';
-    filtersButton.style.textAlign = 'center';
+    addMapButton(map, filtersButton, google.maps.ControlPosition.RIGHT_CENTER);
     
     filtersButton.addEventListener("click", () => {
         filters.style.display = "block";
@@ -217,10 +238,8 @@ function initFilters(map: google.maps.Map) {
 }
 
 function initMap() {
-    const headerHeight = document.getElementById("header-desktop").offsetHeight;
-    var mapElem = document.getElementById("map") as HTMLElement;
     var map = new google.maps.Map(
-        mapElem,
+        document.getElementById("map") as HTMLElement,
         {
             center: { lat: 40.7128, lng: -74.006 },
             zoom: 13,
@@ -229,8 +248,6 @@ function initMap() {
     );
 
     initFilters(map);
-
-    mapElem.style.top = headerHeight.toString()+"px";
 }
 
 function handleLocationError(
