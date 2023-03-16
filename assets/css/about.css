@@ -1,0 +1,13 @@
+.aboutcontainer{
+    display:flex;
+    align-items:center;
+}
+.aboutpic {
+    float:left;
+    width:30%;
+  }
+.abouttextcontainer{
+    position:relative;
+    float:right;
+    width:60%;
+}

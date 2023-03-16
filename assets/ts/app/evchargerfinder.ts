@@ -150,6 +150,8 @@ function initSearchBar(map: google.maps.Map) {
     const input = document.getElementById("searchloc") as HTMLInputElement;
     const searchBox = new google.maps.places.SearchBox(input);
 
+    map.controls[google.maps.ControlPosition.TOP_CENTER].push(input);
+
     // Bias the SearchBox results towards current map's viewport.
     map.addListener("bounds_changed", () => {
         searchBox.setBounds(map.getBounds() as google.maps.LatLngBounds);
@@ -238,14 +240,21 @@ function initFilters(map: google.maps.Map) {
 }
 
 function initMap() {
+    const headerHeight = document.getElementById("header-desktop")?.offsetHeight;
+    var mapElem = document.getElementById("map") as HTMLElement;
+
     var map = new google.maps.Map(
-        document.getElementById("map") as HTMLElement,
+        mapElem,
         {
             center: { lat: 40.7128, lng: -74.006 },
             zoom: 13,
             mapTypeId: "roadmap",
         }
     );
+    if (headerHeight != 0) {
+        mapElem.style.top = headerHeight?.toString()+"px";
+        mapElem.style.height = "calc(100% - " + headerHeight?.toString()+"px)";
+    }
 
     initFilters(map);
 }

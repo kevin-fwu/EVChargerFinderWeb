@@ -1,4 +1,4 @@
-baseURL = 'https://kevinfwu.com/webtest/'
+baseURL = 'https://kevinfwu.com/'
 title = 'EVChargerFinder'
 theme = 'LoveIt'
 
@@ -6,6 +6,9 @@ theme = 'LoveIt'
 languageCode = 'en-us'
 # language name ["English", "简体中文", "Français", "Polski", ...]
 languageName = "English"
+
+[markup.goldmark.renderer]
+unsafe= true
 
 # Menu config
 [menu]
